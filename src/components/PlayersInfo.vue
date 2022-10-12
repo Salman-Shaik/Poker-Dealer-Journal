@@ -48,7 +48,9 @@ export default {
       const playerIndex = this.players.indexOf(player);
       this.players.splice(playerIndex, 1);
     },
-    startGame() {},
+    startGame() {
+      this.$emit("start");
+    },
   },
   props: ["players"],
 };

@@ -1,15 +1,31 @@
 <script>
 import PlayersInfo from "./components/PlayersInfo.vue";
+import Journal from "./components/Journal.vue";
 
 export default {
   name: "app",
   components: {
     PlayersInfo,
+    Journal,
   },
   data() {
     return {
       players: [],
+      gameStatus: "",
+      smallBlinds: [],
+      potValue: 0,
+      numberOfGames: 0,
+      highestPot: 0,
     };
+  },
+  methods: {
+    startGame() {
+      this.gameStatus = "STARTED";
+    },
+    saveGameRow(index, smallBlind, currentPot) {
+      this.smallBlinds[index] = smallBlind;
+      this.potValue = this.potValue + currentPot;
+    },
   },
 };
 </script>
@@ -20,9 +36,22 @@ export default {
   </header>
 
   <main>
-    <players-info v-bind:players="players"></players-info>
-    <section class="journal"></section>
-    <section class="stats"></section>
+    <players-info
+      v-if="!gameStatus"
+      @start="startGame"
+      v-bind:players="players"
+    >
+    </players-info>
+    <journal
+      v-else-if="gameStatus === 'STARTED'"
+      @save="saveGameRow"
+      v-bind:players="players"
+      v-bind:potValue="potValue"
+      v-bind:highestPot="highestPot"
+      v-bind:smallBlinds="smallBlinds"
+      v-bind:numberOfGames="numberOfGames"
+    ></journal>
+    <section class="stats" v-else></section>
   </main>
 </template>
 
